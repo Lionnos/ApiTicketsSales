@@ -1,5 +1,24 @@
+create database dbSaleOfTickets;
+
+use dbSaleOfTickets;
+
+create table subsidiary (
+    idSubsidiary char(12) not null,
+    name varchar(100) not null,
+    address varchar(255) not null,
+    city varchar(100) not null,
+    cellPhone varchar(20) not null,
+    email varchar(100) not null,
+    openingHours varchar(255) not null,
+    manager varchar(100) not null,
+    description TEXT,
+
+    primary key (idSubsidiary)
+) engine = InnoDB;
+
 create table user (
     idUser char(12) not null,
+    idSubsidiary char(12) not null,
     username varchar(100) unique not null,
     password varchar(100) not null,
     firstName varchar(50) not null,
@@ -10,24 +29,10 @@ create table user (
     registerDate datetime not null,
     modificationDate datetime not null,
 
-    primary key (idUser)
+    primary key (idUser),
+    foreign key (idSubsidiary) references subsidiary(idSubsidiary)
 ) engine = InnoDB;
 
-create table subsidiary (
-    idSubsidiary char(12) not null,
-    idUser char(12) not null,
-    name varchar(100) not null,
-    address varchar(255) not null,
-    city varchar(100) not null,
-    cellPhone varchar(20) not null,
-    email varchar(100) not null,
-    openingHours varchar(255) not null,
-    manager varchar(100) not null,
-    descripcion text,
-
-    primary key (idSubsidiary),
-    foreign key (idUser) references user(idUser)
-) engine = InnoDB;
 
 create table vehicle (
     idVehicle char(12) not null,
@@ -36,6 +41,8 @@ create table vehicle (
     seats int not null,
     state bit not null,
     description text,
+    registerDate datetime not null,
+    modificationDate datetime not null,
 
     primary key (idVehicle)
 ) engine = InnoDB;
@@ -43,7 +50,9 @@ create table vehicle (
 create table origin (
     idOrigin char(12) not null,
     city varchar(100) not null,
-    estate bit not null,
+    state bit not null,
+    registerDate datetime not null,
+    modificationDate datetime not null,
 
     primary key (idOrigin)
 ) engine = InnoDB;
@@ -51,7 +60,10 @@ create table origin (
 create table destiny (
     idDestiny char(12) not null,
     city varchar(100) not null,
-    estate bit not null,
+    state bit not null,
+    registerDate datetime not null,
+    modificationDate datetime not null,
+
 
     primary key (idDestiny)
 ) engine = InnoDB;
@@ -137,4 +149,18 @@ create table reserve (
     primary key (idReserver),
     foreign key (idClient) references client(idClient),
     foreign key (idProgramming) references programming(idProgramming)
-) engine = InnoDB;
+) engine = INNODB;
+
+
+INSERT INTO subsidiary (idSubsidiary, name, address, city, cellPhone, email, openingHours, manager, description) 
+VALUES 
+('697337296cd1', 'Main Subsidiary', '123 Main Street', 'Cityville', '123-456-7890', 'main@example.com', 'Mon-Fri: 9am-6pm', 'John Manager', 'Main subsidiary location');
+
+
+INSERT INTO user (idUser,idSubsidiary, username, password, firstName, surName, dni, birthDate, gender, registerDate, modificationDate) 
+VALUES 
+('0e8e83e5389e', '697337296cd1', 'Lionos', '1001linux', 'Henry', 'Leon', '73505700', '2000-05-15', 1, NOW(), NOW()),
+('0e8e83e5386g', '697337296cd1', 'admin', 'admin', 'Jane', 'Smith', '87654321', '1995-08-20', 0, NOW(), NOW());
+
+
+
